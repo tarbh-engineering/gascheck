@@ -33,6 +33,7 @@ view model =
             , Html.Attributes.class "shake"
                 |> Element.htmlAttribute
             , Element.alignTop
+            , paddingXY 20 0
             ]
             { src = Img.astro, description = "" }
       , [ text "Gascheck"
@@ -84,7 +85,7 @@ view model =
         , [ Input.text
                 [ onEnter Types.GasSubmit
                 , spinner
-                    |> el [ Element.alignRight, Element.centerY, Element.paddingXY 5 0 ]
+                    |> el [ Element.alignRight, Element.centerY, paddingXY 5 0 ]
                     |> when model.inProgress
                     |> Element.inFront
                 , width fill
@@ -290,13 +291,11 @@ rotate =
 
 spinner : Element msg
 spinner =
-    '✷'
-        |> String.fromChar
-        |> text
-        |> el
-            [ rotate
-            , Font.size 25
-            ]
+    Element.image
+        [ height <| px 25
+        , rotate
+        ]
+        { src = Img.sun, description = "" }
 
 
 box : Element msg -> Element msg

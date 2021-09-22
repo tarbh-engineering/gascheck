@@ -1,0 +1,56 @@
+@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
+  html {
+    height: 100vh !important;
+  }
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    top: 0;
+  }
+  50% {
+    top: 20px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.shake:hover {
+  animation-duration: 0.3s !important;
+}
+
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url("./OpenSans.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Mars";
+  src: url("./Mars.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Fjalla";
+  src: url("./Fjalla.ttf") format("truetype");
+}

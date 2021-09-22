@@ -8,12 +8,16 @@ import Http
 import Json.Decode as JD exposing (Decoder)
 import Maybe.Extra exposing (unwrap)
 import Result.Extra exposing (unpack)
+import Ticks
 import Types exposing (Model, Msg(..))
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        Tick n ->
+            ( { model | ticks = Ticks.flip n model.ticks }, Cmd.none )
+
         GasUpdate val ->
             ( { model | gas = val }, Cmd.none )
 
@@ -30,6 +34,7 @@ update msg model =
                         ( { model
                             | inProgress = True
                             , results = Nothing
+                            , ticks = Ticks.empty
                           }
                         , Http.get
                             { url = "/ping"
@@ -41,19 +46,25 @@ update msg model =
         DataCb gasUsed res ->
             res
                 |> unpack
-                    (\err ->
+                    (\_ ->
                         ( { model | inProgress = False }
                         , Cmd.none
                         )
                     )
                     (\data ->
+                        let
+                            ethUsed =
+                                Eth.Units.gwei
+                                    (round
+                                        (toFloat gasUsed
+                                            * (data.baseFee + data.priority)
+                                        )
+                                    )
+                        in
                         ( { model
                             | inProgress = False
                             , results =
-                                BigInt.div
-                                    (Eth.Units.gwei
-                                        (round (toFloat gasUsed * data.baseFee))
-                                    )
+                                BigInt.div ethUsed
                                     (weiPerDollar data.price)
                                     |> BigInt.toString
                                     |> String.toFloat
@@ -61,6 +72,7 @@ update msg model =
                                         (\f ->
                                             { res = data
                                             , gasUsed = gasUsed
+                                            , ethUsed = ethUsed
                                             , total =
                                                 (f / 100)
                                                     |> FormatNumber.format usLocale

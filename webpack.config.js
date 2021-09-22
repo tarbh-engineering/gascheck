@@ -48,6 +48,14 @@ module.exports = (env) => {
           exclude: [/elm-stuff/, /node_modules/],
           use: elmLoader,
         },
+        {
+          test: /\.(woff(2)?|ttf)$/,
+          type: "asset/inline",
+        },
+        {
+          test: /\.css$/,
+          use: ["style-loader", "css-loader"],
+        },
       ],
     },
     plugins: [new webpack.NoEmitOnErrorsPlugin()],

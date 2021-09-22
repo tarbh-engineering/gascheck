@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import Browser
+import Ticks
 import Types exposing (Flags, Model, Msg)
 import Update exposing (update)
 import View exposing (view)
@@ -17,10 +18,12 @@ main =
 
 
 init : Flags -> ( Model, Cmd Msg )
-init _ =
+init flags =
     ( { gas = ""
       , results = Nothing
       , inProgress = False
+      , ticks = Ticks.empty
+      , small = flags.width < 768
       }
     , Cmd.none
     )
